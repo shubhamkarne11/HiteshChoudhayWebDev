@@ -1,0 +1,1 @@
+const words = ['nodejs', 'react', 'angular', 'vue', 'svelte'];
