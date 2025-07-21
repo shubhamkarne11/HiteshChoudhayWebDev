@@ -2,18 +2,39 @@ const todoInput = document.getElementById("todo-input");
 const addTaskButton = document.getElementById("add-task-btn");
 const todoList = document.getElementById("todo-list");  
 
-addTaskButton.addEventListener('click',function(){
-    let value = todoInput.value;
-    let li = document.createElement('li');
-    li.innerText = value;
-    let button1 = document.createElement('button');
-    button1.innerText = 'X';
-    button1.addEventListener('click',function(){
-        li.remove();
-    })
-    li.appendChild(button1);
-    todoList.appendChild(li);
-    todoInput.value = '';
-})
+let list = [];
 
 
+addTaskButton.addEventListener("click", () => {
+    const todoText = todoInput.value.trim();
+    if (todoText !== "") {
+        const newTodo = {
+            id: Date.now(),
+            text: todoText,
+            completed: false
+        };
+        list.push(newTodo);
+        localStorage.setItem("todoList", JSON.stringify(list));
+        todoInput.value = "";
+        renderList(); // Update the UI here
+    }
+});
+
+// Function to render the todo list
+function renderList() {
+    todoList.innerHTML = "";
+    list.forEach(todo => {
+        const li = document.createElement("li");
+        li.textContent = todo.text;
+        todoList.appendChild(li);
+    });
+}
+
+// Optionally, load existing todos from localStorage on page load
+window.addEventListener("DOMContentLoaded", () => {
+    const storedList = localStorage.getItem("todoList");
+    if (storedList) {
+        list = JSON.parse(storedList);
+        renderList();
+    }
+});
